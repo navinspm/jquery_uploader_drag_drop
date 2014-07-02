@@ -1,0 +1,47 @@
+setup carrierwae uploader
+
+add gem 'jquery-uploader-rails'
+
+in application.js add //= require jquery-fileupload/basic
+
+controller change create function into
+
+	def create
+    	@painting = Painting.create(painting_params)
+  	end
+
+ in your js.coffee file 
+
+ 	add jQuery ->
+  		$('#new_painting').fileupload
+   		dataType: "script"
+
+and in view crete new file creat.js.erb
+	<%if @painting.new_record?%>
+		alert("Failed to upload painting:<%=j @painting.errors.full_messages.join(',').html.erb%>")
+	<%else%>
+   	 $("#paintings").append("<%= j render(@painting)%>")
+	<%end%>
+
+create new partial file for index paintings called _paintin.html.erb
+
+in index file add this lines
+
+ <h1>Listing paintings</h1>
+
+<div id="paintings">
+	<%= render @paintings %>
+</div>
+<div class="clear"></div>
+
+
+
+<%= form_for Painting.new do |f| %>
+	<%= f.label :image, "upload painting" %>
+	<%= f.file_field :image, multiple: true, name: "painting[image]" %>
+<% end %>
+
+
+thats all you hav to do
+
+
